@@ -1,0 +1,144 @@
+Linux I/O redirection:
+--------------------
+
+1) In Linux, I/O redirection changes the input and output source and destinations of the command.
+2) By default a command/program reads the input from the command line and send the output to the command line. Redirection changes this behaviour and let you control from where the input comes where the output goes.
+
+stdin: Standard Input (File descriptor 0)
+stdout: Standard Output (File descriptor 1)
+stderr: Standard Error (File descriptor 2)
+
+Redirection Operators:
+---------------------
+
+1) output redirection:
+   ------------------
+      a) ">" redirects the output of a command to the file.
+           
+           root@Linux-VM:~# echo "Hello world" > output.txt
+           root@Linux-VM:~# cat output.txt
+           Hello world
+
+      b) ">>" redirects the output of a command to the file and appends the content in the file.
+       
+                root@Linux-VM:~# echo "This is the 2nd line, append it under the first line" >> output.txt
+                root@Linux-VM:~# cat output.txt
+                Hello world
+                This is the 2nd line, append it under the first line
+                root@Linux-VM:~#
+
+      c) Tee Command: Redirects the output to a file and displays it on the screen simultaneously.
+           
+            root@Linux-VM:~# echo "Hello world" | tee output.txt
+            Hello world
+            root@Linux-VM:~# cat output.txt
+            Hello world
+    
+2) input redirection:
+   -----------------
+
+   1) "<" redirects the input to the command from the file instead of standard input.
+
+        Ex:-  root@Linux-VM:~# cat > fruits.txt
+              Apple
+              Banana
+              mango
+              orange
+              Grapes
+              root@Linux-VM:~# sort < fruits.txt
+              Apple
+              Banana
+              Grapes
+              mango
+              orange
+
+3) Error redirection:
+   -----------------
+
+   1) "2>" --> redirects the standard error to the file and overwrites the content if file already exists.
+
+       Ex:- root@Linux-VM:~# ls bhargav.txt 2> error.log
+            root@Linux-VM:~# cat error.log
+            ls: cannot access 'bhargav.txt': No such file or directory
+            root@Linux-VM:~#
+
+   2) "2>>" --> redirects the standard error to a file and appends the content if file already exists.
+       Ex:- root@Linux-VM:~# cat error.log
+            ls: cannot access 'bhargav.txt': No such file or directory
+            root@Linux-VM:~# ls ram.txt 2>> error.log
+            root@Linux-VM:~# cat error.log
+            ls: cannot access 'bhargav.txt': No such file or directory
+            ls: cannot access 'ram.txt': No such file or directory
+            root@Linux-VM:~#
+
+4) Redirects both output and error together:
+   ----------------------------------------
+
+  1) To redirect both stdout and stderr to a file:
+
+            bash std-script.sh > /tmp/error 2>&1
+      This will overwrite the file with both standard output and errors.
+
+  2)  To append instead of overwriting:
+
+           bash std-script.sh >> /tmp/error 2>&1
+
+
+Demo using an example:
+---------------------
+script.sh
+---------
+
+# script contains both the correct and incorrect commands.
+
+ls -l
+df -h
+bhargav # incorrect command
+free -m
+nproc
+hi # incorrect command
+how # incorrect command
+cat /etc/os-release
+
+
+case 1:- Print only successful commands
+    bash script.sh 2> /tmp/error.log
+    Redirects any errors (stderr) to /tmp/error.log, so only the output of successful commands is shown.
+
+case 2:- Print only failed commands
+     bash script.sh > output.txt
+             (or)
+     bash script.sh 1> output.txt
+     Redirects standard output (stdout) to output.txt, so only error messages (stderr) are displayed.
+
+Note:- /dev/null is a special file in Linux, which discard the every data written into it.
+        When you redirect output to /dev/null, the data is thrown away and not saved or displayed.
+
+case 3:- To redirect both stdout and stderr to a file:
+
+     bash script.sh > output.txt 2>&1
+
+     This will overwrite the file with both standard output and errors.
+
+case 4:- To append to the file instead of overwriting
+
+      bash script.sh >> output.txt 2>&1
+
+case 5:- Display and Save Output
+
+    a) to overwrite 
+        
+           bash script.sh | tee /tmp/output.txt
+
+    b) To append to the file
+
+          bash script.sh | tee /tmp/output.txt
+
+
+
+
+
+
+ 
+
+
