@@ -1,3 +1,4 @@
+#sorting the numbers in ascending order
 #!/bin/bash
 
 echo "Enter the numbers with space:"
