@@ -4,8 +4,9 @@
 
 if [ $# -gt 0 ]; then
     REGIONS=$@
-    echo "Fetching VPC ID's from $REGIONS"
+    
     for REGION in $REGIONS; do
+        echo "Fetching VPC ID's from $REGION"
         aws ec2 describe-vpcs --region ${REGION} | jq ".Vpcs[].VpcId" -r | tr '[:lower:]' '[:upper:]'
         # -r is used to remove the double quotes.
         # tr (trim) is used to convert the lower case letters to the upper case
