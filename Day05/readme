@@ -1,0 +1,141 @@
+Regular expressions are powerful tools in shell scripts which is used to validate the input data.
+
+Ex:- Create a script to validate the username, username needs to be 3 small letters followed by 3
+     numbers.
+script.sh
+---------
+#!/bin/bash
+
+$USER=$1
+if [[ $USER =~ ^[a-z]{3}[0-9]{3}$ ]]; then
+    echo "username is valid"
+else
+    echo "username is invalid"
+fi
+
+Exaplanation:-
+
+if [[ $USER =~ ^[a-z]{3}[0-9]{3}$ ]] ; then
+$USER: This variable holds the current user's username (set by the system).
+[[ ... ]]: This is the syntax for a conditional expression in Bash (used to test a condition).
+=~: This is the operator used for regular expression matching in Bash.
+^[a-z]{3}[0-9]{3}$: This is the regular expression that checks the username format. Here's how it works:
+^: Anchors the match at the beginning of the string (ensuring no extra characters before).
+[a-z]{3}: Matches exactly 3 lowercase letters (a through z).
+[0-9]{3}: Matches exactly 3 digits (0 through 9).
+$: Anchors the match at the end of the string (ensuring no extra characters after).
+
+------------------------------------------------------------------------------------------------
+
+2. common Regex patterns:
+-------------------------
+
+\d - Matches any digit.
+\D - Matches any non-digit character.
+\s - Matches any whitespace.
+\W - Matches any non-word character (like punctuation).
+
+Example: To find a phone number pattern like 123-456-7890, you can use:
+
+\d{3}-\d{3}-\d{4}
+
+-------------------------------------------------------------------------------------------------
+
+3. iteration contro using the break and continue.
+-------------------------------------------------
+break -> It is used to exit the loop when a condition is met.
+continue -> it is used to skip the current iteration and move to the next iteration.
+
+break.sh
+--------
+
+#!/bin/bash
+
+for i in {1..10}
+do
+        if [ $i -eq 5 ]
+        then
+                echo "breaking the loop"
+                break
+        else
+                echo $i
+        fi
+done
+
+continue.sh
+-----------
+#!/bin/bash
+
+for i in {1..10}
+do
+        if [ $i -eq 5 ]
+        then
+                echo "skipping the current iteration"
+                continue
+        else
+                echo $i
+        fi
+done
+
+Arrays in shell script:
+----------------------
+Arrays are used to store multiple values in a single variable.
+
+ex1:- array1.sh
+     ---------
+#!/bin/bash
+
+name="Bhargavaram"
+
+echo ${#name}
+
+for i in $(seq 0 ${#name})
+do
+        echo "${name:$i:2}"
+done
+
+ex2:- fruits_array.sh
+  ------------------
+
+#!/bin/bash
+
+fruits=("apple" "banana" "pinepapple" "orange")
+
+echo "Length of the array is :${#fruits[@]}"
+
+for i in $(seq 0 ${#fruits})
+do
+        echo ${fruits[i]}
+done
+
+
+Practical scenario:
+------------------
+
+1) Regex for Phone Numbers:
+
+Extract phone numbers starting with a specific pattern like 1-234.
+
+#!/bin/bash
+
+echo "Enter the phone numbers with space:"
+
+read -a input
+
+echo "No of phone numbers are ${#input[@]}"
+
+for phone in ${input[@]}
+do
+        if [[ $phone  =~ ^1-234-[0-9]{6}$ ]]
+        then
+                echo "Entered number is correct"
+        else
+                echo "Entered number is incorrect"
+        fi
+done
+
+
+
+
+
+
